@@ -1,5 +1,7 @@
 package com.uce.edu.demo;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		//Buscar
+		//Buscar por id
 		//LOG.info("Dato con JPA: " + personaJpaService.buscarPorId(5));
 
 		//Insertar
@@ -33,7 +35,9 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 		//per.setId(6);
 		per.setNombre("Gustavo");
 		per.setApellido("Kanhwald");
-		this.personaJpaService.guardar(per);
+		per.setGenero("M");
+		per.setCedula("1475456445");
+		//this.personaJpaService.guardar(per);
 		
 		//Actualizar
 		Persona per1 = new Persona();
@@ -44,6 +48,16 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 		
 		//Eliminar
 		//this.personaJpaService.eliminar(7);
+		
+		//Buscar por cedula
+		Persona  p = this.personaJpaService.buscarPorCedula("1475456445");
+		LOG.info("Persona encontrada: " + p);
+		
+		//Buscar por apellido
+		List<Persona> listaPersona = this.personaJpaService.buscarPorApellido("Kanhwald");
+		for(Persona item: listaPersona) {
+			LOG.info("Persona: " + item);
+		}
 		
 	}
 
