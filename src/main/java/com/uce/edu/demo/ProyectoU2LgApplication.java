@@ -59,6 +59,18 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 			LOG.info("Persona: " + item);
 		}
 		
+		//Buscar por genero
+		List<Persona> listaPersonaGenero = this.personaJpaService.buscarPorGenero("M");
+		for(Persona item: listaPersonaGenero) {
+			LOG.info("Persona: " + item);
+		}
+		
+		//Buscar por nombre
+		List<Persona> listaPersonaNombre = this.personaJpaService.buscarPorNombre("Gustavo");
+		for(Persona item: listaPersonaNombre) {
+			LOG.info("Persona: " + item);
+		}
+		
 	}
 
 }
