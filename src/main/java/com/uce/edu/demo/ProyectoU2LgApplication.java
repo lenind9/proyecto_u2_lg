@@ -1,6 +1,6 @@
 package com.uce.edu.demo;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,10 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.uce.edu.demo.prueba.modelo.Propietario;
-import com.uce.edu.demo.prueba.modelo.Vehiculo;
-import com.uce.edu.demo.prueba.service.IPropietarioJpaService;
-import com.uce.edu.demo.prueba.service.IVehiculoJpaService;
+import com.uce.edu.demo.repository.modelo.Persona;
+import com.uce.edu.demo.service.IPersonaJpaService;
 
 @SpringBootApplication
 public class ProyectoU2LgApplication implements CommandLineRunner {
@@ -20,10 +18,7 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	private static final Logger LOG = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 	
 	@Autowired
-	private IVehiculoJpaService vehiculoJpaService;
-	
-	@Autowired
-	private IPropietarioJpaService propietarioJpaService;
+	private IPersonaJpaService personaJpaService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoU2LgApplication.class, args);
@@ -32,25 +27,30 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		//1
-		Propietario p = new Propietario();
-		p.setApellido("Guananga");
-		p.setNombre("Lenin");
-		p.setCedula("1750418084");
-		this.propietarioJpaService.insertarPropietario(p);
+		Persona per1 = new Persona();
+		per1.setApellido("Velez");
+		per1.setNombre("Daniel");
+		per1.setCedula("1784664212");
+		per1.setGenero("M");
+		//this.personaJpaService.guardar(per1);
 		
-		//2
-		Vehiculo v = new Vehiculo();
-		v.setMarca("Toyota");
-		v.setModelo("Raize");
-		v.setPlaca("PQR-4501");
-		v.setPrecio(new BigDecimal(45000));
-		v.setTipo("P");
-		this.vehiculoJpaService.insertarVehiculo(v);
+		//1 TypedQuery
+		Persona perTyped = this.personaJpaService.buscarPorCedulaTyped("1745001323");
+		LOG.info("Persona Typed: " + perTyped);
 		
-		//3
-		v.setPrecio(new BigDecimal(42000));
-		this.vehiculoJpaService.actualizarVehiculo(v);
+		//2 NamedQuery
+		Persona perNamed = this.personaJpaService.buscarPorCedulaNamed("1745001323");
+		LOG.info("Persona Named: " + perNamed);
+		
+		//3 TypedQuery y NamedQuery
+		Persona perTypedNamed = this.personaJpaService.buscarPorCedulaTypedNamed("1745001323");
+		LOG.info("Persona TypedNamed: " + perTypedNamed);
+		
+		//4 Varios NamedQuery
+		List<Persona> listaPersona = this.personaJpaService.buscarPorNombreApellido("Daniel", "Velez");
+		for(Persona item:listaPersona) {
+			LOG.info("Persona: " + item);
+		}
 		
 	}
 
