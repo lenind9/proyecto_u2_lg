@@ -9,8 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.uce.edu.demo.repository.modelo.Persona;
-import com.uce.edu.demo.service.IPersonaJpaService;
+import com.uce.edu.demo.repository.modelo.Estudiante;
+import com.uce.edu.demo.service.IEstudianteJpaService;
 
 @SpringBootApplication
 public class ProyectoU2LgApplication implements CommandLineRunner {
@@ -18,7 +18,7 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	private static final Logger LOG = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 	
 	@Autowired
-	private IPersonaJpaService personaJpaService;
+	private IEstudianteJpaService estudianteJpaService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoU2LgApplication.class, args);
@@ -27,29 +27,40 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Persona per1 = new Persona();
-		per1.setApellido("Velez");
-		per1.setNombre("Daniel");
-		per1.setCedula("1784664212");
-		per1.setGenero("M");
-		//this.personaJpaService.guardar(per1);
+		Estudiante est1 = new Estudiante();
+		est1.setApellido("Lema");
+		est1.setNombre("Nicolas");
+		est1.setCedula("1750364499");
+		est1.setMaterias("2");
+		//this.estudianteJpaService.guardar(est1);
 		
-		//1 TypedQuery
-		Persona perTyped = this.personaJpaService.buscarPorCedulaTyped("1745001323");
-		LOG.info("Persona Typed: " + perTyped);
+		//TypedQuery
+		//1
+		Estudiante estTyped1 = this.estudianteJpaService.buscarPorCedulaTyped("1721433398");
+		LOG.info("Estudiante Typed 1: " + estTyped1);
 		
-		//2 NamedQuery
-		Persona perNamed = this.personaJpaService.buscarPorCedulaNamed("1745001323");
-		LOG.info("Persona Named: " + perNamed);
+		//2
+		Estudiante estTyped2 = this.estudianteJpaService.buscarPorMateriasTyped("5");
+		LOG.info("Estudiante Typed 2: " + estTyped2);
 		
-		//3 TypedQuery y NamedQuery
-		Persona perTypedNamed = this.personaJpaService.buscarPorCedulaTypedNamed("1745001323");
-		LOG.info("Persona TypedNamed: " + perTypedNamed);
+		//NamedQuery
+		//1
+		Estudiante estNamed1 = this.estudianteJpaService.buscarPorCedulaNamed("1721433398");
+		LOG.info("Estudiante Named 1: " + estNamed1);
 		
-		//4 Varios NamedQuery
-		List<Persona> listaPersona = this.personaJpaService.buscarPorNombreApellido("Daniel", "Velez");
-		for(Persona item:listaPersona) {
-			LOG.info("Persona: " + item);
+		//2
+		Estudiante estNamed2 = this.estudianteJpaService.buscarPorMateriasNamed("5");
+		LOG.info("Estudiante Named 2: " + estNamed2);
+		
+		//Typed y Named
+		//1
+		Estudiante estTypedNamed = this.estudianteJpaService.buscarPorCedulaTypedNamed("1721433398");
+		LOG.info("Estudiante TypedNamed 1: " + estTypedNamed);
+		
+		//2
+		List<Estudiante> listaEstudiante = this.estudianteJpaService.buscarPorNombreApellidoTypedNamed("Nicolas", "Lema");
+		for(Estudiante item:listaEstudiante) {
+			LOG.info("Estudiante TypedNamed 2: " + item);
 		}
 		
 	}

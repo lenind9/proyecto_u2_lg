@@ -50,6 +50,15 @@ public class PersonaJpaRepositoryImpl implements IPersonaJpaRepository {
 	}
 	
 	@Override
+	public List<Persona> buscarPorNombreApellido(String nombre, String apellido) {
+		// TODO Auto-generated method stub
+		TypedQuery<Persona> myQuery = this.entityManager.createNamedQuery("Persona.buscarPorNombreApellido", Persona.class);
+		myQuery.setParameter("datoNombre", nombre);
+		myQuery.setParameter("datoApellido", apellido);
+		return myQuery.getResultList();
+	}
+	
+	@Override
 	public Persona buscarPorCedula(String cedula) {
 		// SELECT * FROM persona WHERE pers_cedula = '1721330451';
 		Query jpqlQuery = this.entityManager.createQuery("SELECT p FROM Persona p WHERE p.cedula = :datoCedula");
@@ -109,15 +118,6 @@ public class PersonaJpaRepositoryImpl implements IPersonaJpaRepository {
 		return myQuery.executeUpdate();
 	}
 	
-	@Override
-	public List<Persona> buscarPorNombreApellido(String nombre, String apellido) {
-		// TODO Auto-generated method stub
-		TypedQuery<Persona> myQuery = this.entityManager.createNamedQuery("Persona.buscarPorNombreApellido", Persona.class);
-		myQuery.setParameter("datoNombre", nombre);
-		myQuery.setParameter("datoApellido", apellido);
-		return myQuery.getResultList();
-	}
-
 	@Override
 	public int eliminarPorGenero(String genero) {
 		// TODO Auto-generated method stub
