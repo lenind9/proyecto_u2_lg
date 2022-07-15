@@ -79,6 +79,38 @@ public class EstudianteJpaRepositoryImpl implements IEstudianteJpaRepository {
 		myTypedQuery.setParameter("datoApellido", apellido);
 		return myTypedQuery.getResultList();
 	}
+	
+	@Override
+	public Estudiante buscarPorCedulaNative(String cedula) {
+		// TODO Auto-generated method stub
+		Query myQuery = this.entityManager.createNativeQuery("SELECT * FROM estudiante WHERE estu_cedula = :datoCedula", Estudiante.class);
+		myQuery.setParameter("datoCedula", cedula);
+		return (Estudiante) myQuery.getSingleResult();
+	}
+
+	@Override
+	public Estudiante buscarPorApellidoNative(String apellido) {
+		// TODO Auto-generated method stub
+		Query myQuery = this.entityManager.createNativeQuery("SELECT * FROM estudiante WHERE estu_apellido = :datoApellido", Estudiante.class);
+		myQuery.setParameter("datoApellido", apellido);
+		return (Estudiante) myQuery.getSingleResult();
+	}
+
+	@Override
+	public Estudiante buscarPorCedulaNamedNative(String cedula) {
+		// TODO Auto-generated method stub
+		TypedQuery<Estudiante> myQuery = this.entityManager.createNamedQuery("Estudiante.buscarPorCedulaNative", Estudiante.class);
+		myQuery.setParameter("datoCedula", cedula);
+		return myQuery.getSingleResult();
+	}
+
+	@Override
+	public Estudiante buscarPorApellidoNamedNative(String apellido) {
+		// TODO Auto-generated method stub
+		TypedQuery<Estudiante> myQuery = this.entityManager.createNamedQuery("Estudiante.buscarPorApellido", Estudiante.class);
+		myQuery.setParameter("datoApellido", apellido);
+		return myQuery.getSingleResult();
+	}
 
 	@Override
 	public void actualizar(Estudiante e) {

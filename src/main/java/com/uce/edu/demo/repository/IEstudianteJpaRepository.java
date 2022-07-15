@@ -15,6 +15,11 @@ public interface IEstudianteJpaRepository {
 	public Estudiante buscarPorCedulaTypedNamed(String cedula);
 	public List<Estudiante> buscarPorNombreApellidoTypedNamed(String nombre, String apellido);
 	
+	public Estudiante buscarPorCedulaNative(String cedula);
+	public Estudiante buscarPorApellidoNative(String apellido);
+	public Estudiante buscarPorCedulaNamedNative(String cedula);
+	public Estudiante buscarPorApellidoNamedNative(String apellido);
+	
 	public void actualizar(Estudiante e);
 	public void eliminar(Integer id);
 }
