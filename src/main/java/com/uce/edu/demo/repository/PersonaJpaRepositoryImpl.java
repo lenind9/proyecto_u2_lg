@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
@@ -112,15 +113,80 @@ public class PersonaJpaRepositoryImpl implements IPersonaJpaRepository {
 	@Override
 	public Persona buscarPorCedulaCriteriaApi(String cedula) {
 		// TODO Auto-generated method stub
+		//SELECT * FROM Persona p WHERE p.cedula = :datoCedula
+		//Creamos una instancia de la interfaz CriteriaBuilder Fabrica para construir el SQL
 		CriteriaBuilder myBuilder = this.entityManager.getCriteriaBuilder();
+		
+		//Especificamos el retorno de mi SQL
 		CriteriaQuery<Persona> myQuery = myBuilder.createQuery(Persona.class);
 		
+		//Aqui empezamos a construir el SQL
 		//Root o FROM
-		Root<Persona> personaRoot = myQuery.from(Persona.class);
-		myQuery = myQuery.select(personaRoot).where(myBuilder.equal(personaRoot.get("cedula"), cedula));
+		Root<Persona> personaFrom = myQuery.from(Persona.class); //FROM Persona
+		//myQuery.select(personaFrom); //SELECT p FROM
+		//Las condiciones where en Cristeria API se los conoce como predicados
+		Predicate p1 = myBuilder.equal(personaFrom.get("cedula"), cedula); //p.cedula = :datoCedula
+		
+		myQuery.select(personaFrom).where(p1);
+		
+		//Finalizado mi query completo
+		TypedQuery<Persona> myQueryFinal = this.entityManager.createQuery(myQuery);
+		return myQueryFinal.getSingleResult();
+	}
+	
+	@Override
+	public Persona buscarDinamicamente(String nombre, String apellido, String genero) {
+		// TODO Auto-generated method stub
+		CriteriaBuilder myCriteria = this.entityManager.getCriteriaBuilder(); //Constructor
+		CriteriaQuery<Persona> myQuery = myCriteria.createQuery(Persona.class);
+		
+		Root<Persona> myTabla = myQuery.from(Persona.class);
+		
+		//pers_nombre = 'Diana'
+		Predicate predicadoNombre = myCriteria.equal(myTabla.get("nombre"), nombre); //(nombre de la entidad, nombre de parametro)
+		//pers_apellido = 'Muñoz'
+		Predicate predicateApellido = myCriteria.equal(myTabla.get("apellido"), apellido);
+		
+		//pers_nombre = 'Diana' and pers_apellido = 'Muñoz'
+		Predicate miPredicadoFinal = null;
+		if(genero.equals("M")) {
+			miPredicadoFinal = myCriteria.and(predicadoNombre, predicateApellido);
+		} else {
+			miPredicadoFinal = myCriteria.or(predicadoNombre, predicateApellido);
+		}
+		myQuery.select(myTabla).where(miPredicadoFinal);
 		
 		TypedQuery<Persona> myQueryFinal = this.entityManager.createQuery(myQuery);
 		return myQueryFinal.getSingleResult();
+	}
+	
+	@Override
+	public Persona buscarDinamicamentePredicados(String nombre, String apellido, String genero) {
+		// TODO Auto-generated method stub
+		CriteriaBuilder myCriteria = this.entityManager.getCriteriaBuilder();
+	    CriteriaQuery<Persona> myQuery = myCriteria.createQuery(Persona.class);
+	    Root<Persona> myTable = myQuery.from(Persona.class);
+	    
+	    Predicate predicateNombre = myCriteria.equal(myTable.get("nombre"), nombre);
+	    Predicate predicateApellido = myCriteria.equal(myTable.get("apellido"), apellido);
+	    Predicate predicateGenero = myCriteria.equal(myTable.get("genero"), genero);
+
+	    //pers_nombre = 'Diana' and pers_apellido = 'Muñoz'
+	    Predicate myPredicateFinal = null;
+	    if (genero.equals("M")) {
+	        //Predicate predicateFecha = myCriteria.equal(myTable.get("cedula"),"cedula"); como ejemplo, se puede añadir mas condiciones despues
+	        myPredicateFinal = myCriteria.or(predicateNombre,predicateApellido);
+	        myPredicateFinal = myCriteria.and(myPredicateFinal, predicateGenero);
+	    }else if (genero.equals("F")) {
+	        myPredicateFinal = myCriteria.and(predicateNombre, predicateApellido);
+	        myPredicateFinal = myCriteria.or(myPredicateFinal, predicateGenero);
+
+	    }
+
+	    myQuery.select(myTable).where(myPredicateFinal);
+	    TypedQuery<Persona> myQueryFinal = this.entityManager.createQuery(myQuery);
+
+	    return myQueryFinal.getSingleResult();
 	}
 
 	@Override
