@@ -124,7 +124,7 @@ public class PersonaJpaRepositoryImpl implements IPersonaJpaRepository {
 		//Root o FROM
 		Root<Persona> personaFrom = myQuery.from(Persona.class); //FROM Persona
 		//myQuery.select(personaFrom); //SELECT p FROM
-		//Las condiciones where en Cristeria API se los conoce como predicados
+		//Las condiciones where en Criteria API se los conoce como predicados
 		Predicate p1 = myBuilder.equal(personaFrom.get("cedula"), cedula); //p.cedula = :datoCedula
 		
 		myQuery.select(personaFrom).where(p1);
@@ -176,11 +176,10 @@ public class PersonaJpaRepositoryImpl implements IPersonaJpaRepository {
 	    if (genero.equals("M")) {
 	        //Predicate predicateFecha = myCriteria.equal(myTable.get("cedula"),"cedula"); como ejemplo, se puede añadir mas condiciones despues
 	        myPredicateFinal = myCriteria.or(predicateNombre,predicateApellido);
-	        myPredicateFinal = myCriteria.and(myPredicateFinal, predicateGenero);
+	        myPredicateFinal = myCriteria.and(myPredicateFinal, predicateGenero); //nombre o apellido y genero
 	    }else if (genero.equals("F")) {
 	        myPredicateFinal = myCriteria.and(predicateNombre, predicateApellido);
-	        myPredicateFinal = myCriteria.or(myPredicateFinal, predicateGenero);
-
+	        myPredicateFinal = myCriteria.or(myPredicateFinal, predicateGenero); //nombre y apellido o genero
 	    }
 
 	    myQuery.select(myTable).where(myPredicateFinal);

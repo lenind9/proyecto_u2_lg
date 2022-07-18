@@ -38,7 +38,7 @@ public class Estudiante {
 	private String apellido;
 	
 	@Column(name = "estu_materias")
-	private String materias;
+	private Integer materias;
 	
 	@Override
 	public String toString() {
@@ -79,11 +79,11 @@ public class Estudiante {
 		this.apellido = apellido;
 	}
 
-	public String getMaterias() {
+	public Integer getMaterias() {
 		return materias;
 	}
 
-	public void setMaterias(String materias) {
+	public void setMaterias(Integer materias) {
 		this.materias = materias;
 	}
 	

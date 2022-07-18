@@ -87,6 +87,19 @@ public class EstudianteJpaServiceImpl implements IEstudianteJpaService {
 	}
 	
 	@Override
+	public List<Estudiante> buscarDinamicamente(String nombre, String apellido, Integer materias) {
+		// TODO Auto-generated method stub
+		return this.estudianteJpaRepository.buscarDinamicamente(nombre, apellido, materias);
+	}
+
+	@Override
+	public List<Estudiante> buscarDinamicamentePredicados(String nombre, String apellido, Integer materias) {
+		// TODO Auto-generated method stub
+		return this.estudianteJpaRepository.buscarDinamicamentePredicados(nombre, apellido, materias);
+	}
+	
+	
+	@Override
 	public void actualizar(Estudiante e) {
 		// TODO Auto-generated method stub
 		this.estudianteJpaRepository.actualizar(e);
