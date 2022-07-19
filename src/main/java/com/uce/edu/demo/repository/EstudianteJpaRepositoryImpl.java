@@ -15,6 +15,8 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.uce.edu.demo.repository.modelo.Estudiante;
+import com.uce.edu.demo.repository.modelo.EstudianteContadorMateriasPares;
+import com.uce.edu.demo.repository.modelo.EstudianteSencillo;
 
 @Repository
 @Transactional
@@ -82,6 +84,22 @@ public class EstudianteJpaRepositoryImpl implements IEstudianteJpaRepository {
 		myTypedQuery.setParameter("datoNombre", nombre);
 		myTypedQuery.setParameter("datoApellido", apellido);
 		return myTypedQuery.getResultList();
+	}
+	
+	@Override
+	public List<EstudianteSencillo> buscarPorNombreSencillo(String nombre) {
+		// TODO Auto-generated method stub
+		TypedQuery<EstudianteSencillo> myQuery = this.entityManager.createQuery("SELECT NEW com.uce.edu.demo.repository.modelo.EstudianteSencillo(e.nombre, e.apellido) FROM Estudiante e WHERE e.nombre = :datoNombre", EstudianteSencillo.class);
+		myQuery.setParameter("datoNombre", nombre);
+		return myQuery.getResultList();
+	}
+
+	@Override
+	public List<EstudianteContadorMateriasPares> buscarPorMateriasPares() {
+		// TODO Auto-generated method stub
+		//SELECT estu_materias, COUNT(estu_materias) FROM estudiante GROUP BY estu_materias HAVING estu_materias % 2 = 0
+		TypedQuery<EstudianteContadorMateriasPares> myQuery = this.entityManager.createQuery("SELECT NEW com.uce.edu.demo.repository.modelo.EstudianteContadorMateriasPares(e.materias, COUNT(e.materias)) FROM Estudiante e GROUP BY e.materias HAVING materias % 2 = 0", EstudianteContadorMateriasPares.class);
+		return myQuery.getResultList();
 	}
 	
 	@Override
