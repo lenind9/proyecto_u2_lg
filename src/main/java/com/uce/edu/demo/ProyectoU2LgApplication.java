@@ -1,6 +1,6 @@
 package com.uce.edu.demo;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,9 +9,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.uce.edu.demo.repository.modelo.EstudianteContadorMateriasPares;
-import com.uce.edu.demo.repository.modelo.EstudianteSencillo;
-import com.uce.edu.demo.service.IEstudianteJpaService;
+import com.uce.edu.demo.repository.modelo.Ciudadano;
+import com.uce.edu.demo.repository.modelo.Empleado;
+import com.uce.edu.demo.service.ICiudadanoJpaService;
 
 @SpringBootApplication
 public class ProyectoU2LgApplication implements CommandLineRunner {
@@ -19,7 +19,7 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	private static final Logger LOG = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 	
 	@Autowired
-	private IEstudianteJpaService estudianteJpaService;
+	private ICiudadanoJpaService ciudadanoJpaService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoU2LgApplication.class, args);
@@ -28,15 +28,18 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		List<EstudianteSencillo> listaEstudiante = this.estudianteJpaService.buscarPorNombreSencillo("Juan");
-		for(EstudianteSencillo item:listaEstudiante) {
-			LOG.info("Estudiante sencillo: " + item);
-		}
+		Ciudadano ciu1 = new Ciudadano();
+		ciu1.setNombre("Daniel");
+		ciu1.setApellido("Sanchez");
 		
-		List<EstudianteContadorMateriasPares> miListaEstudianteMateriasPares = this.estudianteJpaService.buscarPorMateriasPares();
-		for(EstudianteContadorMateriasPares item:miListaEstudianteMateriasPares) {
-			LOG.info("Materias Pares: " + item);
-		}
+		Empleado empl1 = new Empleado();
+		empl1.setCodigoIess("45774152");
+		empl1.setSalario(new BigDecimal(175));
+		empl1.setCiudadano(ciu1);
+		
+		ciu1.setEmpleado(empl1);
+		
+		this.ciudadanoJpaService.insertar(ciu1);
 		
 	}
 
