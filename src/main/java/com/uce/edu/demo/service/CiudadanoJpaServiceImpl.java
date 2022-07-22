@@ -17,5 +17,23 @@ public class CiudadanoJpaServiceImpl implements ICiudadanoJpaService {
 		// TODO Auto-generated method stub
 		this.ciudadanoJpaRepository.insertar(c);
 	}
+
+	@Override
+	public Ciudadano buscarPorCedula(String cedula) {
+		// TODO Auto-generated method stub
+		return this.ciudadanoJpaRepository.buscarPorCedula(cedula);
+	}
+
+	@Override
+	public void actualizar(Ciudadano c) {
+		// TODO Auto-generated method stub
+		this.ciudadanoJpaRepository.actualizar(c);
+	}
+
+	@Override
+	public void eliminar(String cedula) {
+		// TODO Auto-generated method stub
+		this.ciudadanoJpaRepository.eliminar(cedula);
+	}
 	
 }
