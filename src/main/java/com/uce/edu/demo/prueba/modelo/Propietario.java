@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -27,6 +28,9 @@ public class Propietario {
 	@Column(name = "prop_cedula")
 	private String cedula;
 	
+	@OneToOne(mappedBy = "propietario")
+	private Matricula matricula;
+	
 	@Override
 	public String toString() {
 		return "Propietario [nombre=" + nombre + ", apellido=" + apellido + ", cedula=" + cedula + "]";
@@ -36,6 +40,14 @@ public class Propietario {
 	public String getNombre() {
 		return nombre;
 	}
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
@@ -50,5 +62,13 @@ public class Propietario {
 	}
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
+	}
+	
+	public Matricula getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(Matricula matricula) {
+		this.matricula = matricula;
 	}
 }

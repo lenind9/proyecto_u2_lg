@@ -1,5 +1,6 @@
 package com.uce.edu.demo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +13,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.uce.edu.demo.cajero.repository.modelo.DetalleFactura;
 import com.uce.edu.demo.cajero.repository.modelo.Factura;
 import com.uce.edu.demo.cajero.service.IFacturaService;
+import com.uce.edu.demo.prueba.modelo.Propietario;
+import com.uce.edu.demo.prueba.modelo.Vehiculo;
+import com.uce.edu.demo.prueba.service.IMatriculaGestorJpaService;
+import com.uce.edu.demo.prueba.service.IPropietarioJpaService;
+import com.uce.edu.demo.prueba.service.IVehiculoJpaService;
 
 @SpringBootApplication
 public class ProyectoU2LgApplication implements CommandLineRunner {
@@ -19,7 +25,13 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	private static final Logger LOG = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 	
 	@Autowired
-	private IFacturaService facturaService;
+	private IVehiculoJpaService vehiculoService;
+
+	@Autowired
+	private IPropietarioJpaService propietarioService;
+
+	@Autowired
+	private IMatriculaGestorJpaService matriculaGestorService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoU2LgApplication.class, args);
@@ -28,17 +40,28 @@ public class ProyectoU2LgApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Factura fact = this.facturaService.consultar(1);
-		LOG.info("Numero: " + fact.getNumero());
-		LOG.info("Fecha: " + fact.getFecha());
+		//1
+		Propietario p = new Propietario();
+		p.setApellido("Guananga");
+		p.setNombre("Lenin");
+		p.setCedula("1750418084");
+		this.propietarioService.insertarPropietario(p);
 		
-		LOG.info("Cliente: " + fact.getCliente().getNumeroTarjeta());
+		//2
+		Vehiculo v = new Vehiculo();
+		v.setMarca("Toyota");
+		v.setModelo("Raize");
+		v.setPlaca("PQR-4501");
+		v.setPrecio(new BigDecimal(45000));
+		v.setTipo("P");
+		this.vehiculoService.insertarVehiculo(v);
 		
-		List<DetalleFactura> detalles = fact.getDetalles();
-		for(DetalleFactura deta:detalles) {
-			LOG.info("Detalle: " + deta);
-		}
+		//3
+		v.setPrecio(new BigDecimal(42000));
+		this.vehiculoService.actualizarVehiculo(v);
 		
+		//4
+		this.matriculaGestorService.generar("1750418084", "PQR-4501");
 		
 	}
 
